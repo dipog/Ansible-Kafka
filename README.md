@@ -1,7 +1,5 @@
-# Ansible-kafka
-Interswitch DevOps Challenge
+# Things to do
 
-**Things to do
 
 Install CentOS.
 Install Ansible.
