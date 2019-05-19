@@ -2,7 +2,7 @@
 Interswitch DevOps Challenge
 
 
-install ansible on CentOS 7
+Install ansible on CentOS 7
 ===============
 ansible --version (to confirm if ansible is previously installed)
 sudo yum install ansible
