@@ -1,0 +1,92 @@
+//Create Kafka user
+// create a separate kafka user for operating the Kafka node.
+sudo adduser kafka
+sudo passwd kafka
+
+//switch to the new user and perform the remaining configuration
+su kafka
+
+//Install ZooKeeper and Kafka
+//download Apache Kafka
+http://apache.forsale.plus/kafka/1.0.0/kafka_2.11-1.0.0.tgz
+
+//decompress the tar.gz file
+tar -xzf kafka_2.11-1.0.0.tgz
+
+
+//create data and log directories for ZooKeeper and Kafka
+mkdir -p /home/kafka/zookeeper/data
+mkdir -p /home/kafka/kafka/kafka-logs
+
+//ZooKeeper configuration
+vi kafka_2.11-1.0.0/config/zookeeper.properties
+
+//locate the dataDir property and set the value to point to the new ZooKeeper directory we created above.
+
+dataDir=/home/kafka/zookeeper/data
+
+
+//At the end of this file, we have to add all available ZooKeeper servers. We also add the initLimit and syncLimit properties. 
+
+server.1=kafka1:2888:3888
+server.2=kafka2:2888:3888
+server.3=kafka3:2888:3888
+
+initLimit=5
+syncLimit=2
+
+(i = insert
+:wq = save)
+
+
+//Each of our cluster nodes needs a unique server id. ZooKeeper looks up this information from the following file: /home/kafka/zookeeper/data/myid. We have to execute a command like this on each server - using a different value for each instance. For instance 1 on server kafka1 we use the value "1".
+
+echo "1" > /home/kafka/zookeeper/data/myid
+
+
+//Apache Kafka configuration
+vi kafka_2.11-1.0.0/config/server.properties
+
+//each Kafka cluster node needs a unique id. We have to find the broker.id property in the configuration file and change the id for each server.
+
+broker.id=1
+
+
+//change the log directory location specified in the log.dirs parameter.
+
+log.dirs=/home/kafka/kafka/kafka-logs
+
+//update the listeners and advertised.listeners properties with the current Kafka node hostname.
+listeners=PLAINTEXT://kafka1:9092
+advertised.listeners=PLAINTEXT://kafka1:9092
+
+
+//tell Kafka which ZooKeeper nodes can be used to connect to.
+
+zookeeper.connect=kafka1:2181,kafka2:2181,kafka3:2181
+
+
+//add the property delete.topic.enable. Setting this property to true allows us to easily delete topics at runtime. If this property is not being set, Kafka will only mark topics as deleted.
+
+delete.topic.enable=true
+
+
+//I have configured our 3 node Kafka cluster!
+
+
+
+
+//Start and test the cluster setup
+//Start ZooKeeper
+
+cd kafka_2.11-1.0.0
+nohup bin/zookeeper-server-start.sh config/zookeeper.properties &
+
+
+//Start Apache Kafka
+nohup bin/kafka-server-start.sh config/server.properties &
+
+
+
+
+
