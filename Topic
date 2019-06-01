@@ -1,0 +1,32 @@
+// Create a new topic
+ bin/kafka-topics.sh --create --zookeeper kafka1:2181,kafka2:2181,kafka3:2181 --replication-factor 1 --partitions 6 --topic topic1 --config cleanup.policy=delete --config delete.retention.ms=60000
+ 
+ 
+ //The command above creates a new topic named topic1 with 6 partitions. Each cluster will be responsible for 2 partitions. The replication-factor has been set to 1, which means data is not being replicated and the data for a particular partition will only be stored on one server.
+ //get a list of all existing topics
+ 
+ bin/kafka-topics.sh --list --zookeeper kafka1:2181
+ 
+ 
+ 
+ //get a detailed description of our topic.
+ bin/kafka-topics.sh --describe --zookeeper kafka1:2181 --topic topic1
+ 
+ 
+ 
+ //Test the cluster
+ //The Kafka package already includes two command line tools to create a producer and a consumer that can be used to check if the cluster works.
+// We can start the producer on one of our servers. The command opens a prompt and anything we enter here will be sent to the topic.
+
+bin/kafka-console-producer.sh --broker-list kafka1:9092 --topic topic1
+
+
+
+// start a consumer on one of our servers.
+
+ bin/kafka-console-consumer.sh --bootstrap-server kafka1:9092 --topic topic1
+ 
+ 
+ //Whenever we enter something in the producer prompt it will be printed out in our consumer terminal.
+
+ // This means our test was successful, the Kafka cluster has been set up
