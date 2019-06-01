@@ -2,5 +2,16 @@ Things to do
 Install CentOS. 
 Install Ansible. 
 Install Kafta 
-Create 3 nodes
-Install zookeeper,
+Adjust /etc/hosts file
+Create firewall rules
+Activate the new rules
+Create Kafka user
+Install ZooKeeper and Kafka
+Create directories
+ZooKeeper configuration
+Apache Kafka configuration
+Start and test the cluster setup
+Start ZooKeeper
+Start Apache Kafka
+Create a new topic
+Test the cluster
